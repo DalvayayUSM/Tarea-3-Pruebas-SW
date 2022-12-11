@@ -111,6 +111,7 @@ public class Main {
                     }
                     libro=new Libro(titulo, autores, fechaEdicion, nPaginas, editorial, genero, isbn, ubicacion, estadoLibro, descripcion);
                     libros.add(libro);
+                    autores = new ArrayList<String>();
                     break;
                 case 2:
                     System.out.println("\nOpción seleccionada: Buscar libro");
