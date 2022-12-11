@@ -107,4 +107,26 @@ public class Libro {
         this.estado = estado;
         this.descripcion = descripcion;
     }
+
+    void printLibro(){
+        System.out.format("\nLibro: %s\n", getTitulo());
+        System.out.println("\tAutores: ");
+        for (int j = 0; j < getAutor().size(); j++) {
+            System.out.print("\t\t-" + getAutor().get(j)+"\n");
+        }
+        System.out.println("\tFecha de edicion: " + getFechaEdicion());
+        System.out.format("\tNumero de paginas: %d\n", getnPaginas());
+        System.out.format("\tEditorial: %s\n", getEditorial());
+        System.out.format("\tGenero: %s\n", getEditorial());
+        System.out.format("\tISBN: %d\n", getIsbn());
+        System.out.format("\tDescripcion: %s\n", getDescripcion());
+        System.out.format(
+                "\tEl libro se encuentra en el piso %d, pasillo %d, estante %d, en las coordenadas (%d, %d)\n",
+                getUbicacion().getPiso(),
+                getUbicacion().getPasillo(),
+                getUbicacion().getEstante(),
+                getUbicacion().getPosX(),
+                getUbicacion().getPosY());
+        System.out.println("El libro se encuentra " + getEstado());
+    }
 }

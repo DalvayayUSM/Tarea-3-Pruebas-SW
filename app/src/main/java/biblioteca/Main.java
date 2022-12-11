@@ -28,8 +28,9 @@ public class Main {
         String titulo, autor, editorial, genero, descripcion;
         List<String> autores = new ArrayList<String>();
         String[] fecha;
-        LocalDate fechaEdicion;
-        int opcionMenu, nPaginas, isbn, piso, pasillo, estante, posX, posY, estado, opcionMenu2, posLibro;
+        LocalDate fechaEdicion=LocalDate.now();
+        int opcionMenu, nPaginas, isbn, piso, pasillo, estante, posX, posY, estado, opcionMenu2;
+        List<Integer> opcionesLibros = new ArrayList<Integer>();
         Ubicacion ubicacion;
         Estado estadoLibro=Estado.PRESTADO;
         Libro libro;
@@ -37,18 +38,26 @@ public class Main {
         Boolean existe=false;
         System.out.println("Sistema de registro de biblioteca");
         while(flag){
+            titulo=new String();
+            autor = new String();
+            editorial = new String();
+            genero = new String();
+            descripcion = new String();
+            existe=false;
             System.out.format("\n\n\t-----MENU-----\n1.-Registrar libro\t2.-Buscar libro\n3.-Editar libro\t\t4.-Eliminar libro\n5.-Salir\n");
             System.out.print("Ingrese una opcion: ");
             opcionMenu = opcionScanner.nextInt();
             switch (opcionMenu) {
                 case 1:
-                    System.out.println("\nOpción seleccionada: Registro de libro");
+                    System.out.println("\nOpción seleccionada: Registrar libro");
                     System.out.print("\nIngrese el titulo del libro: ");
                     titulo=tituloScanner.nextLine();
                     do {
                         System.out.print("Ingrese los autores del libro. Si no hay mas, presione Enter: ");
                         autor=autorScanner.nextLine();
-                        autores.add(autor);
+                        if (autor.length()>0){
+                            autores.add(autor);
+                        }
                     } while (autor.length()>0);
                     // informacion
                     System.out.print("Ingrese la fecha de edición del libro (en el formato aaaa-mm-dd): ");
@@ -102,25 +111,6 @@ public class Main {
                     }
                     libro=new Libro(titulo, autores, fechaEdicion, nPaginas, editorial, genero, isbn, ubicacion, estadoLibro, descripcion);
                     libros.add(libro);
-                    System.out.println("Libro agregado");
-                    // se printean libros
-                    for(int i=0; i<libros.size(); i++){
-                        System.out.format("\nLibro: %s\n", libros.get(i).getTitulo());
-                        System.out.println("\tAutores: ");
-                        for(int j=0; j<libros.get(i).getAutor().size()-1; j++){
-                            System.out.format("\t\t-%s\n", libros.get(i).getAutor().get(j));
-                        }
-                        System.out.println("\tFecha de edicion: "+fechaEdicion);
-                        System.out.format("\tNumero de paginas: %d\n", libros.get(i).getnPaginas());
-                        System.out.format("\tEditorial: %s\n", libros.get(i).getEditorial());
-                        System.out.format("\tGenero: %s\n", libros.get(i).getEditorial());
-                        System.out.format("\tISBN: %d\n", libros.get(i).getIsbn());
-                        System.out.format("\tDescripcion: %s\n", libros.get(i).getDescripcion());
-                        System.out.format("\tEl libro se encuentra en el piso %d, pasillo %d, estante %d, en las coordenadas (%d, %d)\n", 
-                                libros.get(i).getUbicacion().getPiso(), libros.get(i).getUbicacion().getPasillo(), 
-                                libros.get(i).getUbicacion().getEstante(), libros.get(i).getUbicacion().getPosX(), 
-                                libros.get(i).getUbicacion().getPosY());
-                    }
                     break;
                 case 2:
                     System.out.println("\nOpción seleccionada: Buscar libro");
@@ -128,31 +118,29 @@ public class Main {
                     System.out.print("Ingrese una opcion: ");
                     opcionMenu2=opcionScanner.nextInt();
                     switch (opcionMenu2) {
-                        case 1:     //FALLA, ARREGLAR
+                        case 1:
                             System.out.print("Ingrese el titulo del libro que quiere buscar: ");
                             titulo=tituloScanner.nextLine();
                             for (int i = 0; i < libros.size(); i++){
                                 if (libros.get(i).getTitulo().contains(titulo)) {
-                                    System.out.println("El libro se encuentra " + libros.get(i).getEstado());
-                                    posLibro=i;
+                                    libros.get(i).printLibro();
                                     existe=true;
                                 }
                             }
-                            if (!existe){
+                            if (existe == false) {
                                 System.out.println("El libro solicitado no esta en el catalogo");
                             }
                             break;
                         case 2:
-                            System.out.print("Ingrese el titulo del libro que quiere buscar: ");
+                            System.out.print("Ingrese el autor del libro que quiere buscar: ");
                             autor = autorScanner.nextLine();
                             for (int i = 0; i < libros.size(); i++) {
                                 if (libros.get(i).getAutor().contains(autor)) {
-                                    System.out.println("El libro se encuentra " + libros.get(i).getEstado());
-                                    posLibro = i;
+                                    libros.get(i).printLibro();
                                     existe = true;
                                 }
                             }
-                            if (!existe) {
+                            if (existe == false) {
                                 System.out.println("El libro solicitado no esta en el catalogo");
                             }
                             break;
@@ -161,12 +149,11 @@ public class Main {
                             isbn = isbnScanner.nextInt();
                             for (int i = 0; i < libros.size(); i++) {
                                 if (isbn == libros.get(i).getIsbn()) {
-                                    System.out.println("El libro se encuentra " + libros.get(i).getEstado());
-                                    posLibro = i;
+                                    libros.get(i).printLibro();
                                     existe = true;
                                 }
                             }
-                            if (!existe) {
+                            if (existe == false) {
                                 System.out.println("El libro solicitado no esta en el catalogo");
                             }
                             break;
@@ -174,6 +161,113 @@ public class Main {
                             System.out.println("La opcion ingresada no es valida");
                             break;
                     }
+                    break;
+                case 3:
+                    System.out.println("\nOpción seleccionada: Editar libro");
+                    System.out.println("Los libros en el catalogo son:");
+                    for (int i = 0; i < libros.size(); i++){
+                        System.out.format("\t%d.- %s\n", i+1, libros.get(i).getTitulo());
+                        opcionesLibros.add(i);
+                    }
+                    System.out.print("Ingrese una opcion: ");
+                    opcionMenu2=opcionScanner.nextInt()-1;
+                    if(opcionesLibros.contains(opcionMenu2)){
+                        System.out.print("\nIngrese el titulo del libro: ");
+                        titulo = tituloScanner.nextLine();
+                        do {
+                            System.out.print("Ingrese los autores del libro. Si no hay mas, presione Enter: ");
+                            autor = autorScanner.nextLine();
+                            autores.add(autor);
+                        } while (autor.length() > 0);
+                        // informacion
+                        System.out.print("Ingrese la fecha de edición del libro (en el formato aaaa-mm-dd): ");
+                        fecha = fechaScanner.nextLine().split("-");
+                        fechaEdicion = LocalDate.of(Integer.parseInt(fecha[0]), Month.of(Integer.parseInt(fecha[1])),
+                                Integer.parseInt(fecha[2]));
+                        System.out.print("Ingrese el numero de paginas del libro: ");
+                        nPaginas = nPaginasScanner.nextInt();
+                        System.out.print("Ingrese la editorial del libro: ");
+                        editorial = editorialScanner.nextLine();
+                        System.out.print("Ingrese el genero del libro: ");
+                        genero = generoScanner.nextLine();
+                        System.out.print("Ingrese el ISBN del libro: ");
+                        isbn = isbnScanner.nextInt();
+                        // ubicacion
+                        System.out.println("\nUbicacion del libro");
+                        System.out.print("\nIngrese el piso donde se encuentra el libro: ");
+                        piso = pisoScanner.nextInt();
+                        System.out.print("Ingrese el pasillo donde se encuentra el libro: ");
+                        pasillo = pasilloScanner.nextInt();
+                        System.out.print("Ingrese el estante donde se encuentra el libro: ");
+                        estante = estanteScanner.nextInt();
+                        System.out.print("Ingrese la coordenada X donde se encuentra el libro: ");
+                        posX = posXScanner.nextInt();
+                        System.out.print("Ingrese la coordenada Y donde se encuentra el libro: ");
+                        posY = posYScanner.nextInt();
+                        ubicacion = new Ubicacion(piso, pasillo, estante, posX, posY);
+                        // descripcion
+                        System.out.print("\nIngrese una descripcion del libro: ");
+                        descripcion = descripcionScanner.nextLine();
+                        // estado libro
+                        System.out.println("\nEstado del libro. El estado puede ser:");
+                        System.out.println("\n1.- Prestado\n2.- Disponible\n3.- Extraviado");
+                        System.out.print("\nIngrese el numero del estado del libro: ");
+                        estado = estadoScanner.nextInt();
+                        switch (estado) {
+                            case 1:
+                                estadoLibro = Estado.PRESTADO;
+                                break;
+                            case 2:
+                                estadoLibro = Estado.DISPONIBLE;
+                                break;
+                            case 3:
+                                estadoLibro = Estado.EXTRAVIADO;
+                                break;
+                            default:
+                                do {
+                                    System.out
+                                            .print("El numero de estado del libro no es valida. Ingrese nuevamente: ");
+                                    estado = estadoScanner.nextInt();
+                                } while (estado < 1 || estado > 3);
+                                break;
+                        }
+                        ubicacion.setPiso(piso);
+                        ubicacion.setPasillo(pasillo);
+                        ubicacion.setEstante(estante);
+                        ubicacion.setPosX(posX);
+                        ubicacion.setPosY(posY);                        
+                        libros.get(opcionMenu2).setTitulo(titulo);
+                        libros.get(opcionMenu2).setAutor(autores);
+                        libros.get(opcionMenu2).setFechaEdicion(fechaEdicion);
+                        libros.get(opcionMenu2).setnPaginas(nPaginas);
+                        libros.get(opcionMenu2).setEditorial(editorial);
+                        libros.get(opcionMenu2).setGenero(genero);
+                        libros.get(opcionMenu2).setIsbn(isbn);
+                        libros.get(opcionMenu2).setDescripcion(descripcion);
+                        libros.get(opcionMenu2).setUbicacion(ubicacion);
+                        libros.get(opcionMenu2).setEstado(estadoLibro);
+                        System.out.println("El libro ha sido editado");
+                    } else{
+                        System.out.println("La opcion ingresada no es valida");
+                    }
+                    opcionesLibros.clear();
+                    break;
+                case 4:
+                    System.out.println("\nOpción seleccionada: Eliminar libro");
+                    System.out.println("Los libros en el catalogo son:");
+                    for (int i = 0; i < libros.size(); i++) {
+                        System.out.format("\t%d.- %s\n", i+1, libros.get(i).getTitulo());
+                        opcionesLibros.add(i);
+                    }
+                    System.out.print("Ingrese una opcion: ");
+                    opcionMenu2 = opcionScanner.nextInt()-1;
+                    if(opcionesLibros.contains(opcionMenu2)){
+                        libros.remove(libros.get(opcionMenu2));
+                        System.out.println("El libro ha sido eliminado");
+                    } else {
+                        System.out.println("La opcion ingresada no es valida");
+                    }
+                    opcionesLibros.clear();
                     break;
                 case 5:
                     flag=false;
@@ -185,10 +279,6 @@ public class Main {
                     break;
             }
         }
-        
-        
-        
-
         opcionScanner.close();
         tituloScanner.close();
         autorScanner.close();
