@@ -1,5 +1,8 @@
 package biblioteca;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Month;
@@ -36,6 +39,38 @@ public class Main {
         Libro libro;
         Boolean flag=true;
         Boolean existe=false;
+        // se cargan libros al catalogo
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("app\\src\\main\\java\\biblioteca\\catalogo.txt"));
+            String l = br.readLine();
+            while (l != null) {
+                String[] componentes = l.split(",");
+                autores.add(componentes[1]);
+                fecha = componentes[2].split("-");
+                fechaEdicion = LocalDate.of(Integer.parseInt(fecha[0]), Month.of(Integer.parseInt(fecha[1])), Integer.parseInt(fecha[2]));
+                Ubicacion ubicacionCatalogo = new Ubicacion(Integer.parseInt(componentes[7]), Integer.parseInt(componentes[8]), Integer.parseInt(componentes[9]), Integer.parseInt(componentes[10]), Integer.parseInt(componentes[11]));
+                switch (componentes[12]) {
+                    case "PRESTADO":
+                        estadoLibro=Estado.PRESTADO;
+                        break;
+                    case "DISPONIBLE":
+                        estadoLibro=Estado.DISPONIBLE;
+                        break;
+                    default:
+                        estadoLibro = Estado.EXTRAVIADO;
+                        break;
+                }
+                Libro libroCatalogo = new Libro(componentes[0], autores, fechaEdicion, Integer.parseInt(componentes[3]), componentes[4], componentes[5], Integer.parseInt(componentes[6]), ubicacionCatalogo, estadoLibro, componentes[13]);
+                libros.add(libroCatalogo);
+                l = br.readLine();
+                autores.clear();
+            }
+            br.close();
+        } catch (IOException e) {
+            System.out.println("El archivo 'catalogo.txt' no se pudo leer");
+            e.printStackTrace();
+        }
+
         System.out.println("Sistema de registro de biblioteca");
         while(flag){
             titulo=new String();
