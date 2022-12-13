@@ -1,7 +1,0 @@
-Harry Potter y la Piedra Filosofal,J.K. Rowling,1997-6-26,288,Salamandra,Magia,9789,3,1,5,30,15,DISPONIBLE,Primer libro de la saga Harry Potter
-Harry Potter y la Camara Secreta,J.K. Rowling,1998-7-2,288,Salamandra,Magia,9790,3,1,5,31,15,EXTRAVIADO,Segundo libro de la saga Harry Potter
-Harry Potter y el Prisionero de Azkaban,J.K. Rowling,1999-7-8,359,Salamandra,Magia,9791,3,1,5,32,15,PRESTADO,Tercer libro de la saga Harry Potter
-Harry Potter y el Caliz de Fuego,J.K. Rowling,2000-7-8,639,Salamandra,Magia,9792,3,1,5,33,15,DISPONIBLE,Cuarto libro de la saga Harry Potter
-Harry Potter y la Orden del Fenix,J.K. Rowling,2003-6-21,893,Salamandra,Magia,9793,3,1,5,34,15,PRESTADO,Quinto libro de la saga Harry Potter
-Harry Potter y el Misterio del Principe,J.K. Rowling,2005-7-16,602,Salamandra,Magia,9794,3,1,5,35,15,DISPONIBLE,Sexto libro de la saga Harry Potter
-Harry Potter y las Reliquias de la Muerte,J.K. Rowling,2007-7-21,638,Salamandra,Magia,9795,3,1,5,36,15,EXTRAVIADO,Septimo libro de la saga Harry Potter
